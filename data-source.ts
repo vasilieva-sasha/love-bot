@@ -10,4 +10,5 @@ export const AppDataSource = new DataSource({
   database: process.env.DATABASE_URL || 'postgres',
   entities: [User, Couple, Invite, MenuItem, Order],
   migrations: ['src/migrations/*.ts'],
+  synchronize: true,
 });
