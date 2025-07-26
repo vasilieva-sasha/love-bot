@@ -1,3 +1,8 @@
+import { randomUUID } from 'crypto';
+
+if (!(global as any).crypto) {
+  (global as any).crypto = { randomUUID };
+}
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ConfigService } from '@nestjs/config';
