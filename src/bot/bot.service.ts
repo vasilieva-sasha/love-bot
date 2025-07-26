@@ -55,7 +55,7 @@ export class BotService {
 • Отправляйте заказы партнёру с милой валютой: поцелуи, обнимашки или послание  
 • Отмечайте выполнение и копите баланс ваших «обнимашек» и «поцелуев»  
 
-Готовы создать своё первое меню?`;
+Готовы начать радовать свою половинку?`;
 
     if (ctx.reply) {
       await ctx.reply(text, mainMenuKeyboard);
@@ -70,7 +70,7 @@ export class BotService {
 
     if (ctx.reply) {
       await ctx.reply(
-        'Напиши первый пункт меню (например, массаж, завтрак). Когда закончишь — нажми "Готово".',
+        'Напиши первый пункт (например, массаж, завтрак). Когда закончишь — нажми "Готово".',
         doneKeyboard,
       );
     }
@@ -100,8 +100,8 @@ export class BotService {
         this.userStates.delete(Number(userId));
         const items = await this.menuService.findByOwner(userId);
         const list =
-          items.map((i) => `• ${i.title}`).join('\n') || 'Меню пустое';
-        await ctx.reply(`Твоё меню:\n${list}`, mainMenuKeyboard);
+          items.map((i) => `• ${i.title}`).join('\n') || 'Список пуст';
+        await ctx.reply(`Твой список:\n${list}`, mainMenuKeyboard);
         return;
       }
 
@@ -200,7 +200,7 @@ export class BotService {
     if (items.length === 0) {
       if (ctx.reply) {
         await ctx.reply(
-          'Меню пустое. Нажми "Создать меню", чтобы добавить пункты.',
+          'Список пуст. Нажми "Придумать сюрприз для партнера", чтобы добавить пункты.',
         );
       }
       return;
@@ -209,7 +209,7 @@ export class BotService {
     const list = items.map((i) => `• ${i.title}`).join('\n');
     if (ctx.reply) {
       await ctx.reply(
-        `Твоё меню:\n${list}\n\nНажми на пункт, чтобы отредактировать или удалить его:`,
+        `Твои сюрпризы:\n${list}\n\nНажми на пункт, чтобы отредактировать или удалить его:`,
         buildMenuManagementKeyboard(items),
       );
     }
@@ -223,11 +223,11 @@ export class BotService {
 
     // Обновляем список
     const items = await this.menuService.findByOwner(userId);
-    const list = items.map((i) => `• ${i.title}`).join('\n') || 'Меню пустое';
+    const list = items.map((i) => `• ${i.title}`).join('\n') || 'Список пуст';
 
     if (ctx.editMessageText) {
       await ctx.editMessageText(
-        `Твоё меню:\n${list}\n\nНажми на кнопку, чтобы удалить пункт:`,
+        `Твои сюрпризы:\n${list}\n\nНажми на кнопку, чтобы удалить пункт:`,
         items.length > 0
           ? buildDeleteMenuKeyboard(items)
           : { reply_markup: { inline_keyboard: [] } }, // empty inline keyboard if no items
@@ -256,7 +256,7 @@ export class BotService {
     const user = await this.userService.findByTelegramId(userId);
     if (!user?.coupleId) {
       await ctx.reply(
-        'У тебя пока нет пары. Пригласи партнёра, чтобы смотреть его меню.',
+        'У тебя пока нет пары. Пригласи партнёра, чтобы смотреть его предложения.',
       );
       return;
     }
@@ -270,11 +270,11 @@ export class BotService {
     const items = await this.menuService.findByOwner(partner.telegramId);
 
     if (items.length === 0) {
-      await ctx.reply('У партнёра пока пустое меню.');
+      await ctx.reply('Партнёр ещё не придумал сюрпризы.');
       return;
     }
 
-    await ctx.reply('Меню партнёра:', buildPartnerMenuKeyboard(items));
+    await ctx.reply('Сюрпризы для тебя:', buildPartnerMenuKeyboard(items));
   }
 
   async startOrder(ctx: Context, menuItemId: string) {

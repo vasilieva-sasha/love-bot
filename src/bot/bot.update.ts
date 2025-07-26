@@ -38,31 +38,33 @@ export class BotUpdate {
   }
 
   @Command('balance')
+  @Hears('📊 Баланс')
   async balance(@Ctx() ctx: Context) {
     await this.botService.showBalance(ctx);
   }
 
   @Command('history')
+  @Hears('🕓 История заказов')
   async history(@Ctx() ctx: Context) {
     await this.botService.showOrderHistory(ctx);
   }
 
-  @Hears('Создать меню')
+  @Hears('🌸 Придумать сюрприз для партнера')
   async createMenu(@Ctx() ctx: Context) {
     await this.botService.startMenuCreation(ctx);
   }
 
-  @Hears('Моё меню')
+  @Hears('💌 Что могу сделать для тебя')
   async showMenu(@Ctx() ctx: Context) {
     await this.botService.showMenu(ctx);
   }
 
-  @Hears('Меню партнёра')
+  @Hears('🎁 Что ты можешь для меня')
   async showPartnerMenu(@Ctx() ctx: Context) {
     await this.botService.showPartnerMenu(ctx);
   }
 
-  @Hears('Пригласить партнёра')
+  @Hears('🔗 Пригласить партнёра')
   async invitePartner(@Ctx() ctx: Context) {
     await this.botService.generateInviteLink(ctx);
   }
