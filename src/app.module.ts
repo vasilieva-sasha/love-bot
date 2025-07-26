@@ -24,7 +24,7 @@ import { OrderModule } from './order/order.module';
           config.database = undefined; // or set to new Uint8Array() if needed
         } else {
           config.database =
-            configService.get<string>('DATABASE_PATH') || 'database.sqlite';
+            configService.get<string>('DATABASE_URL') || 'postgres';
         }
         return config;
       },

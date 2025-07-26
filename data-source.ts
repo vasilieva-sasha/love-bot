@@ -7,7 +7,7 @@ import { Order } from './src/order/order.entity';
 
 export const AppDataSource = new DataSource({
   type: 'postgres',
-  database: process.env.DATABASE_PATH || 'database.sqlite',
+  database: process.env.DATABASE_URL || 'postgres',
   entities: [User, Couple, Invite, MenuItem, Order],
   migrations: ['src/migrations/*.ts'],
 });

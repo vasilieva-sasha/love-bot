@@ -1,8 +1,8 @@
 import { DataSourceOptions } from 'typeorm';
 
 export const ormConfig: DataSourceOptions = {
-  type: 'sqlite',
-  database: 'database.sqlite',
+  type: 'postgres',
+  database: process.env.DATABASE_URL || 'postgres',
   entities: [__dirname + '/../**/*.entity.{ts,js}'],
   synchronize: true,
 };
