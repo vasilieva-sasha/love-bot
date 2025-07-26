@@ -31,13 +31,22 @@ export class BotService {
     private inviteService: InviteService,
   ) {}
 
-  // Проверка безопасного получения userId
   private getUserId(ctx: Context): string | null {
     const userId = ctx.from?.id;
     return userId ? userId.toString() : null;
   }
 
   async handleStart(ctx: Context) {
+    const userId = this.getUserId(ctx);
+    if (!userId) return;
+
+    let user = await this.userService.findByTelegramId(userId);
+    if (!user) {
+      user = await this.userService.create({
+        telegramId: userId,
+        name: ctx.from?.first_name || 'Без имени',
+      });
+    }
     const text = `Привет! 👋
 
 Этот бот помогает парам радовать друг друга небольшими сюрпризами:
@@ -48,7 +57,6 @@ export class BotService {
 
 Готовы создать своё первое меню?`;
 
-    // Проверяем, можем ли мы отправить сообщение
     if (ctx.reply) {
       await ctx.reply(text, mainMenuKeyboard);
     }
@@ -56,7 +64,7 @@ export class BotService {
 
   async startMenuCreation(ctx: Context) {
     const userId = this.getUserId(ctx);
-    if (!userId) return; // если нет userId — выходим
+    if (!userId) return;
 
     this.userStates.set(Number(userId), 'ADDING_MENU');
 
@@ -333,9 +341,21 @@ export class BotService {
       });
     }
 
+    // Проверяем токен
+    const creatorId = await this.inviteService.useInvite(token);
+    if (!creatorId) {
+      await ctx.reply('Эта ссылка недействительна или уже использована.');
+      return;
+    }
+
+    if (creatorId === user.id) {
+      await ctx.reply('Нельзя использовать собственную ссылку 😅');
+      return;
+    }
+
     if (user.coupleId) {
       await ctx.reply('Ты уже состоишь в паре ❤️');
-      const invite = await this.inviteService.findByToken(token); // метод нужно добавить
+      const invite = await this.inviteService.findByToken(token);
       if (invite) {
         const creator = await this.userService.findById(invite.creatorId);
         if (creator?.telegramId) {
@@ -346,18 +366,6 @@ export class BotService {
         }
       }
 
-      return;
-    }
-
-    // Проверяем токен
-    const creatorId = await this.inviteService.useInvite(token);
-    if (!creatorId) {
-      await ctx.reply('Эта ссылка недействительна или уже использована.');
-      return;
-    }
-
-    if (creatorId === user.id) {
-      await ctx.reply('Нельзя использовать собственную ссылку 😅');
       return;
     }
 
