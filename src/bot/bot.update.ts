@@ -49,17 +49,17 @@ export class BotUpdate {
     await this.botService.showOrderHistory(ctx);
   }
 
-  @Hears('🌸 Придумать сюрприз для партнера')
+  @Hears('➕ Добавить пункт в мой список')
   async createMenu(@Ctx() ctx: Context) {
     await this.botService.startMenuCreation(ctx);
   }
 
-  @Hears('💌 Что могу сделать для тебя')
+  @Hears('💌 Я могу сделать для партнёра')
   async showMenu(@Ctx() ctx: Context) {
     await this.botService.showMenu(ctx);
   }
 
-  @Hears('🎁 Что ты можешь для меня')
+  @Hears('🎁 Партнёр может сделать для меня')
   async showPartnerMenu(@Ctx() ctx: Context) {
     await this.botService.showPartnerMenu(ctx);
   }

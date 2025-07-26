@@ -3,11 +3,11 @@ import { InlineKeyboardButton } from 'telegraf/typings/core/types/typegram';
 export const mainMenuKeyboard = {
   reply_markup: {
     keyboard: [
-      [{ text: '🌸 Придумать сюрприз для партнера' }],
       [
-        { text: '💌 Что могу сделать для тебя' },
-        { text: '🎁 Что ты можешь для меня' },
+        { text: '💌 Я могу сделать для партнёра' },
+        { text: '🎁 Партнёр может сделать для меня' },
       ],
+      [{ text: '➕ Добавить пункт в мой список' }],
       [{ text: '🔗 Пригласить партнёра' }],
       [{ text: '📊 Баланс' }, { text: '🕓 История заказов' }],
     ],
