@@ -6,7 +6,7 @@ import { MenuItem } from './src/menu/menu.entity';
 import { Order } from './src/order/order.entity';
 
 export const AppDataSource = new DataSource({
-  type: 'sqlite',
+  type: 'postgres',
   database: process.env.DATABASE_PATH || 'database.sqlite',
   entities: [User, Couple, Invite, MenuItem, Order],
   migrations: ['src/migrations/*.ts'],
