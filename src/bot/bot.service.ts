@@ -158,10 +158,12 @@ export class BotService {
 
       await ctx.reply(`Заказ отправлен партнёру!`);
 
+      const menuItem = await this.menuService.findOne(pending.menuItemId);
+
       // Уведомляем партнёра
       await ctx.telegram.sendMessage(
         Number(partner.telegramId),
-        `Тебе заказали: ${pending.currency}\nСрок: ${text}\nПринять?`,
+        `Тебе заказали: ${menuItem?.title || ''} ${pending.currency}\nСрок: ${text}\nПринять?`,
         {
           reply_markup: {
             inline_keyboard: [
@@ -545,7 +547,7 @@ export class BotService {
     }
 
     const history = orders
-      .map((o) => {
+      .map(async (o) => {
         const role = o.fromUserId === user.id ? 'Ты заказал' : 'Тебе заказали';
         const status =
           o.status === 'completed'
@@ -555,7 +557,8 @@ export class BotService {
               : o.status === 'pending'
                 ? '⌛ ожидает'
                 : '❌ отклонён';
-        return `${role}: ${o.currency} — ${o.deadline} (${status})`;
+        const menuItem = await this.menuService.findOne(o.menuItemId);
+        return `${role}: ${menuItem?.title || 'неизвестно'} ${o.currency} — ${o.deadline} (${status})`;
       })
       .join('\n\n');
 
